@@ -1,0 +1,39 @@
+More markup options:
+
+<%
+  render_tabnav :html => {:id => "main_navigation", :class => "clearfix"} do |n|
+    n.tab_partial "/shared/my_custom_tab"
+    n.add_tab :html => {:class => "home_tab"} do |t|
+      t.named "Home"
+      t.links_to root_path
+      t.highlights_on :controller => :home, :action => :index
+    end
+    n.add_tab :html => {:class => "heading"} do |t|
+      t.named "Froobles Heading"
+      t.highlights_on :controller => :froobles
+    end
+    n.add_tab do |t|
+      t.named "Froobles"
+      t.links_to froobles_path, :target => "_blank", :rel => "http://foo.bar/"
+      t.highlights_on :controller => :froobles, :action => :index
+    end
+  end
+%>
+
+in /app/views/shared/_my_custom_tab.html.erb:
+
+<div class="my_custom_class">
+  <%- if tab.has_link? -%>
+    <%= link_to tab.name, tab.url %>
+  <%- else -%>
+    <span><%= tab.name %></span>
+  <%- end -%>
+</div>
+
+On froobles/index outputs:
+
+<ul id="main_navigation" class="clearfix">
+  <li class="home_tab"><div class="my_custom_class"><a href="/">Home</a></div></li>
+  <li class="heading active"><div class="my_custom_class"><span>Froobles Heading</span></div></li>
+  <li class="active"><div class="my_custom_class"><a href="/froobles">Froobles</a></div></li>
+</ul>
