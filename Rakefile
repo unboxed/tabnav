@@ -7,11 +7,10 @@ begin
     gem.name = "tabnav"
     gem.summary = %Q{TODO: one-line summary of your gem}
     gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "alex.tomlins@unboxedconsulting.com"
-    gem.homepage = "http://github.com/alext/tabnav"
-    gem.authors = ["Alex Tomlins"]
+    gem.email = "github@unboxedconsulting.com"
+    gem.homepage = "http://github.com/unboxed/tabnav"
+    gem.authors = ["Unboxed"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
