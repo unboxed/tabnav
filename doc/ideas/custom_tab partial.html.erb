@@ -1,4 +1,4 @@
-More markup options:
+Custom partial for tab contents
 
 <%
   render_tabnav :html => {:id => "main_navigation", :class => "clearfix"} do |n|
@@ -36,4 +36,53 @@ On froobles/index outputs:
   <li class="home_tab"><div class="my_custom_class"><a href="/">Home</a></div></li>
   <li class="heading active"><div class="my_custom_class"><span>Froobles Heading</span></div></li>
   <li class="active"><div class="my_custom_class"><a href="/froobles">Froobles</a></div></li>
+</ul>
+
+
+With nested menus:
+
+<%
+  render_tabnav do |n|
+    n.tab_partial "/shared/my_custom_tab"
+    n.add_tab do |t|
+      t.named "Home"
+      t.links_to root_path
+      t.highlights_on :controller => :home, :action => :index
+    end
+
+    n.add_sub_nav do |sn|
+      sn.named "Froobles"
+
+      sn.add_tab do |t|
+        t.named "All Froobles"
+        t.links_to froobles_path
+        t.highlights_on :controller => :froobles, :action => :index
+      end
+
+      sn.add_tab do |t|
+        t.named "New Frooble"
+        t.links_to new_frooble_path
+        t.highlights_on :controller => :froobles, :action => :new
+        t.highlights_on :controller => :froobles, :action => :create
+      end
+    end
+
+    n.add_tab do |t|
+      t.named "Something Else"
+      t.links_to "/somewhere"
+    end
+  end
+%>
+
+On the froobles index, outputs:
+
+<ul>
+  <li><div class="my_custom_class"><a href="/">Home</a></div></li>
+  <li><div class="my_custom_class"><span>All Froobles</span></div>
+    <ul>
+      <li class="active"><a href="/froobles">Froobles</a></li>
+      <li><a href="/froobles/new">New Frooble</a></li>
+    </ul>
+  </li>
+  <li><div class="my_custom_class"><a href="/somewhere">Something Else</a></div></li>
 </ul>
