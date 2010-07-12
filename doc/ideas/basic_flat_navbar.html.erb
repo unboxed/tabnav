@@ -1,0 +1,53 @@
+
+Flat Navbar:
+
+<%
+  render_tabnav do |n|
+    n.add_tab do |t|
+      t.named "Home"
+      t.links_to root_path
+      t.highlights_on :controller => :home, :action => :index
+    end
+    n.add_tab do |t|
+      t.named "Froobles"
+      t.links_to froobles_path
+      t.highlights_on :controller => :froobles
+    end
+  end
+%>
+
+On home/index outputs:
+
+<ul>
+  <li class="active"><a href="/">Home</a></li>
+  <li><a href="/froobles">Froobles</a></li>
+</ul>
+
+More markup options:
+
+<%
+  render_tabnav :id => "main_navigation", :class => "clearfix" do |n|
+    n.add_tab :class => "home_tab" do |t|
+      t.named "Home"
+      t.links_to root_path
+      t.highlights_on :controller => :home, :action => :index
+    end
+    n.add_tab :class => "heading" do |t|
+      t.named "Froobles Heading"
+      t.highlights_on :controller => :froobles
+    end
+    n.add_tab do |t|
+      t.named "Froobles"
+      t.links_to froobles_path, :target => "_blank", :rel => "http://foo.bar/"
+      t.highlights_on :controller => :froobles, :action => :index
+    end
+  end
+%>
+
+On froobles/index outputs:
+
+<ul id="main_navigation" class="clearfix">
+  <li class="home_tab"><a href="/">Home</a></li>
+  <li class="heading active"><span>Froobles Heading</span></li>
+  <li class="active"><a href="/froobles" target="_blank" rel="http://foo.bar/">Froobles</a></li>
+</ul>

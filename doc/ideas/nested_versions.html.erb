@@ -1,0 +1,47 @@
+
+Nested Manus:
+
+<%
+  render_tabnav do |n|
+    n.add_tab do |t|
+      t.named "Home"
+      t.links_to root_path
+      t.highlights_on :controller => :home, :action => :index
+    end
+
+    n.add_sub_nav do |sn|
+      sn.named "Froobles"
+
+      sn.add_tab do |t|
+        t.named "All Froobles"
+        t.links_to froobles_path
+        t.highlights_on :controller => :froobles, :action => :index
+      end
+
+      sn.add_tab do |t|
+        t.named "New Frooble"
+        t.links_to new_frooble_path
+        t.highlights_on :controller => :froobles, :action => :new
+        t.highlights_on :controller => :froobles, :action => :create
+      end
+    end
+
+    n.add_tab do |t|
+      t.named "Something Else"
+      t.links_to "/somewhere"
+    end
+  end
+%>
+
+On the froobles index, outputs:
+
+<ul>
+  <li><a href="/">Home</a></li>
+  <li><span>All Froobles</span>
+    <ul>
+      <li class="active"><a href="/froobles">Froobles</a></li>
+      <li><a href="/froobles/new">New Frooble</a></li>
+    </ul>
+  </li>
+  <li><a href="/somewhere">Something Else</a></li>
+</ul>
