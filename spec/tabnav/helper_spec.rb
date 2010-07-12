@@ -37,4 +37,8 @@ describe Tabnav::Helper do
       render_tabnav
     end
   end
+
+  it "should be included in ActionController::Base's helpers" do
+    ActionController::Base.helpers.should be_a(Tabnav::Helper)
+  end
 end
