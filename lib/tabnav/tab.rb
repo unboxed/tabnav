@@ -4,6 +4,7 @@ module Tabnav
     def initialize(template, html_options = {})
       @html_options = html_options
       @template = template
+      @text = ''
     end
 
     def named(text)

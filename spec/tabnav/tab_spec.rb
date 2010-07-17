@@ -21,6 +21,21 @@ describe Tabnav::Tab do
       html.should == "<li><a href=\"/wibble\">A Tab</a></li>"
     end
 
+    context "with no name given" do
+      it "should output a blank tab if no link given" do
+        t = Tabnav::Tab.new(@template)
+        html = t.render
+        html.should == "<li><span></span></li>"
+      end
+      
+      it "should output an empty link" do
+        t = Tabnav::Tab.new(@template)
+        t.links_to "/wibble"
+        html = t.render
+        html.should == "<li><a href=\"/wibble\"></a></li>"
+      end
+    end
+
     it "should pass the options given on creation to the li" do
       @template.should_receive(:content_tag).with(:li, {:id => "my_id", :class => "my_class"}).and_return(:some_markup)
       t = Tabnav::Tab.new(@template, :id => "my_id", :class => "my_class")
