@@ -7,6 +7,14 @@ require 'tabnav'
 require 'spec'
 require 'spec/autorun'
 
+# The parts of rspec-rails necessary to use helper example groups
+class ApplicationController < ActionController::Base
+end
+require 'active_support/test_case'
+require 'spec/test/unit'
+require 'spec/rails/example'
+require 'spec/rails/interop/testcase'
+
 Spec::Runner.configure do |config|
 
 end
