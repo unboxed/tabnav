@@ -1,40 +1,33 @@
 require 'spec_helper'
 
-describe Tabnav::Helper do
-  include Tabnav::Helper
+describe Tabnav::Helper, :type => :helper do
 
   describe "render_tabnav" do
     before :each do
-      @navbar = Tabnav::Navbar.new()
+      # helper is an instance of a subclass of ActionView::Base
+      @template = helper
+      @navbar = Tabnav::Navbar.new(@template)
       Tabnav::Navbar.stub!(:new).and_return(@navbar)
-      @navbar.stub!(:render).and_return('')
-      self.stub!(:concat)
+      helper.output_buffer = ''
     end
-
-    it "should create a new Navbar with the options passed" do
-      Tabnav::Navbar.should_receive(:new).with({:foo => 'bar'}).and_return(@navbar)
-      render_tabnav :foo => 'bar' do |n|
+    it "should create a new navbar with the template, and yield it to the block" do
+      Tabnav::Navbar.should_receive(:new).with(@template, {}).and_return(@navbar)
+      helper.render_tabnav do |n|
+        n.should == @navbar
       end
     end
 
-    it "should yield the navbar to the block" do
-      yielded_navbar = nil
-      render_tabnav :foo => 'bar' do |n|
-        yielded_navbar = n
+    it "should create a new navbar with any passed options" do
+      Tabnav::Navbar.should_receive(:new).with(@template, {:class => "my_class", :id => "my_id"}).and_return(@navbar)
+      helper.render_tabnav :class => "my_class", :id => "my_id" do |n|
+        n.should == @navbar
       end
-      yielded_navbar.should == @navbar
-    end
-
-    it "should not blow up if no block given" do
-      lambda do
-        render_tabnav :foo => 'bar'
-      end.should_not raise_error
     end
 
     it "should concat the results of calling render on the navbar" do
       @navbar.should_receive(:render).and_return("Some Navbar Markup")
-      self.should_receive(:concat).with("Some Navbar Markup")
-      render_tabnav
+      helper.render_tabnav {|n| }
+      helper.output_buffer.should == "Some Navbar Markup"
     end
   end
 
