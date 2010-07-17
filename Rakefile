@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "tabnav"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Rails helper for generating navbars}
+    gem.description = %Q{Rails helper for generating navbars in a declarative manner}
     gem.email = "github@unboxedconsulting.com"
     gem.homepage = "http://github.com/unboxed/tabnav"
     gem.authors = ["Unboxed"]
