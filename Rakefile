@@ -10,7 +10,9 @@ begin
     gem.email = "github@unboxedconsulting.com"
     gem.homepage = "http://github.com/unboxed/tabnav"
     gem.authors = ["Unboxed"]
+    gem.add_dependency "actionpack", ">= 2.3.2"
     gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_development_dependency "rspec-rails", ">= 1.2.9"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
