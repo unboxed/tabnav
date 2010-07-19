@@ -54,46 +54,63 @@ describe Tabnav::Tab do
 
     describe "highlighting rules" do
       describe "active logic" do
-        it "should be active if all the optons in the rule match the params" do
-          params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
-          t = Tabnav::Tab.new(@template, params)
-          t.named "A Tab"
-          t.highlights_on "key1" => "a_value", "key2" => "another_value"
-          t.should be_active
+        describe "params based rules" do
+          it "should be active if all the optons in the rule match the params" do
+            params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
+            t = Tabnav::Tab.new(@template, params)
+            t.highlights_on "key1" => "a_value", "key2" => "another_value"
+            t.should be_active
+          end
+
+          it "should not be active if only some of the values match" do
+            params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
+            t = Tabnav::Tab.new(@template, params)
+            t.highlights_on "key1" => "a_value", "key2" => "a different value"
+            t.should_not be_active
+          end
+
+          it "should not be active if some of the values are missing" do
+            params = {"key1" => "a_value", "key3" => "something else"}
+            t = Tabnav::Tab.new(@template, params)
+            t.highlights_on "key1" => "a_value", "key2" => "another_value"
+            t.should_not be_active
+          end
+
+          it "should be active if any of the rules match" do
+            params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
+            t = Tabnav::Tab.new(@template, params)
+            t.highlights_on "key1" => "a_value", "key2" => "a different value"
+            t.highlights_on "key1" => "a_value"
+            t.highlights_on "key2" => "wibble"
+            t.should be_active
+          end
+
+          it "should treat strings ans symobls at matching" do
+            params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
+            t = Tabnav::Tab.new(@template, params)
+            t.highlights_on :key1 => "a_value", :key2 => :another_value
+            t.should be_active
+          end
         end
 
-        it "should not be active if only some of the values match" do
-          params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
-          t = Tabnav::Tab.new(@template, params)
-          t.named "A Tab"
-          t.highlights_on "key1" => "a_value", "key2" => "a different value"
-          t.should_not be_active
-        end
+        describe "proc based rules" do
+          it "should be active if the proc returns true" do
+            t = Tabnav::Tab.new(@template, {})
+            t.highlights_on Proc.new { true }
+            t.should be_active
+          end
 
-        it "should not be active if some of the values are missing" do
-          params = {"key1" => "a_value", "key3" => "something else"}
-          t = Tabnav::Tab.new(@template, params)
-          t.named "A Tab"
-          t.highlights_on "key1" => "a_value", "key2" => "another_value"
-          t.should_not be_active
-        end
+          it "should not be active if the proc returns false" do
+            t = Tabnav::Tab.new(@template, {})
+            t.highlights_on Proc.new { false }
+            t.should_not be_active
+          end
 
-        it "should be active if any of the rules match" do
-          params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
-          t = Tabnav::Tab.new(@template, params)
-          t.named "A Tab"
-          t.highlights_on "key1" => "a_value", "key2" => "a different value"
-          t.highlights_on "key1" => "a_value"
-          t.highlights_on "key2" => "wibble"
-          t.should be_active
-        end
-
-        it "should treat strings ans symobls at matching" do
-          params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
-          t = Tabnav::Tab.new(@template, params)
-          t.named "A Tab"
-          t.highlights_on :key1 => "a_value", :key2 => :another_value
-          t.should be_active
+          it "should co-erce the result of the proc to a boolean" do
+            t = Tabnav::Tab.new(@template, {})
+            t.highlights_on Proc.new { "wibble" }
+            t.active?.should == true
+          end
         end
       end
 

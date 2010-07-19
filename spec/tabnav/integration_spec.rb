@@ -66,6 +66,31 @@ describe Tabnav::Helper, :type => :helper do
               '<li><a href="/froobles" rel="http://foo.bar/" target="_blank">Froobles</a></li></ul>'
         end
 
+        it "should allow multiple tabs to be active at once" do
+          params[:controller] = 'froobles'
+          params[:action] = 'index'
+          params[:foo] = 'bar'
+          helper.render_tabnav do |n|
+            n.add_tab :class => "home_tab" do |t|
+              t.named "Home"
+              t.links_to '/'
+              t.highlights_on :controller => :home, :action => :index
+            end
+            n.add_tab :class => "heading" do |t|
+              t.named "Froobles Heading"
+              t.highlights_on :controller => :froobles
+            end
+            n.add_tab do |t|
+              t.named "Froobles"
+              t.links_to '/froobles', :target => "_blank", :rel => "http://foo.bar/"
+              t.highlights_on :controller => :froobles, :action => :index
+            end
+          end
+          helper.output_buffer.should == '<ul><li class="home_tab"><a href="/">Home</a></li>' +
+              '<li class="heading active"><span>Froobles Heading</span></li>' +
+              '<li class="active"><a href="/froobles" rel="http://foo.bar/" target="_blank">Froobles</a></li></ul>'
+        end
+
         it "should highlight tabs where any of the highlighting rules match" do
           params[:controller] = 'home'
           params[:action] = 'froobles'
@@ -85,6 +110,50 @@ describe Tabnav::Helper, :type => :helper do
           end
           helper.output_buffer.should == '<ul><li><a href="/">Home</a></li><li class="active"><a href="/froobles">Froobles</a></li></ul>'
         end
+      end
+
+      context "proc based rules" do
+        it "should highlight the tab if the give proc evaluates to true" do
+          helper.render_tabnav do |n|
+            n.add_tab do |t|
+              t.named "Home"
+              t.links_to "/"
+              t.highlights_on Proc.new { true }
+            end
+            n.add_tab do |t|
+              t.named "Froobles"
+              t.links_to "/froobles"
+              t.highlights_on Proc.new { false }
+            end
+          end
+          helper.output_buffer.should == '<ul><li class="active"><a href="/">Home</a></li><li><a href="/froobles">Froobles</a></li></ul>'
+        end
+      end
+
+      it "should allow a mixture of rule types" do
+        params[:controller] = 'home'
+        params[:action] = 'index'
+        params[:foo] = 'bar'
+        helper.render_tabnav do |n|
+          n.add_tab :class => "home_tab" do |t|
+            t.named "Home"
+            t.links_to '/'
+            t.highlights_on :controller => :home, :action => :index
+          end
+          n.add_tab :class => "heading" do |t|
+            t.named "Froobles Heading"
+            t.highlights_on :controller => :froobles
+            t.highlights_on Proc.new { true }
+          end
+          n.add_tab do |t|
+            t.named "Froobles"
+            t.links_to '/froobles', :target => "_blank", :rel => "http://foo.bar/"
+            t.highlights_on :controller => :froobles, :action => :index
+          end
+        end
+        helper.output_buffer.should == '<ul><li class="home_tab active"><a href="/">Home</a></li>' +
+            '<li class="heading active"><span>Froobles Heading</span></li>' +
+            '<li><a href="/froobles" rel="http://foo.bar/" target="_blank">Froobles</a></li></ul>'
       end
     end
 
