@@ -1,13 +1,14 @@
 module Tabnav
   class Navbar
-    def initialize(template, options = {})
+    def initialize(template, params, options = {})
       @template = template
+      @params = params
       @html_options = options
       @tabs = []
     end
 
     def add_tab(options = {})
-      t = Tab.new(@template, options)
+      t = Tab.new(@template, @params, options)
       yield t
       @tabs << t
     end

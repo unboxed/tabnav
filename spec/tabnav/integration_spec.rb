@@ -35,8 +35,59 @@ describe Tabnav::Helper, :type => :helper do
         end
       end
       helper.output_buffer.should == '<ul class="clearfix" id="main_navigation"><li class="home_tab"><a href="/">Home</a></li>' +
+          '<li class="heading"><span>Froobles Heading</span></li>' +
+          '<li><a href="/froobles" rel="http://foo.bar/" target="_blank">Froobles</a></li></ul>'
+    end
+
+    describe "highlighting logic" do
+      context "params based rules" do
+        it "should highlight the tab if the rules match the params hash" do
+          params[:controller] = 'home'
+          params[:action] = 'index'
+          params[:foo] = 'bar'
+          helper.render_tabnav :id => "main_navigation", :class => "clearfix" do |n|
+            n.add_tab :class => "home_tab" do |t|
+              t.named "Home"
+              t.links_to '/'
+              t.highlights_on :controller => :home, :action => :index
+            end
+            n.add_tab :class => "heading" do |t|
+              t.named "Froobles Heading"
+              t.highlights_on :controller => :froobles
+            end
+            n.add_tab do |t|
+              t.named "Froobles"
+              t.links_to '/froobles', :target => "_blank", :rel => "http://foo.bar/"
+              t.highlights_on :controller => :froobles, :action => :index
+            end
+          end
+          helper.output_buffer.should == '<ul class="clearfix" id="main_navigation"><li class="home_tab active"><a href="/">Home</a></li>' +
               '<li class="heading"><span>Froobles Heading</span></li>' +
               '<li><a href="/froobles" rel="http://foo.bar/" target="_blank">Froobles</a></li></ul>'
+        end
+
+        it "should highlight tabs where any of the highlighting rules match" do
+          params[:controller] = 'home'
+          params[:action] = 'froobles'
+          params[:foo] = 'bar'
+          helper.render_tabnav do |n|
+            n.add_tab do |t|
+              t.named "Home"
+              t.links_to "/"
+              t.highlights_on :controller => :home, :action => :index
+            end
+            n.add_tab do |t|
+              t.named "Froobles"
+              t.links_to "/froobles"
+              t.highlights_on :controller => :home, :action => :froobles
+              t.highlights_on :controller => :froobles
+            end
+          end
+          helper.output_buffer.should == '<ul><li><a href="/">Home</a></li><li class="active"><a href="/froobles">Froobles</a></li></ul>'
+        end
+      end
     end
+
   end
+
 end
