@@ -5,16 +5,18 @@ module Tabnav
       @html_options = html_options
       @params = params
       @template = template
-      @text = ''
+      @name = ''
       @active = false
     end
 
+    attr_accessor :name, :link_url, :link_options
+
     def named(text)
-      @text = text
+      @name = text
     end
 
     def links_to(url, link_options = {})
-      @link = url
+      @link_url = url
       @link_options = link_options
     end
 
@@ -32,11 +34,14 @@ module Tabnav
 
     def render
       @html_options[:class] = "#{@html_options[:class]} active".strip if self.active?
+      partial = @html_options.delete(:tab_content_partial)
       @template.content_tag(:li, @html_options) do
-        if @link
-          @template.link_to @text, @link, @link_options
+        if partial
+          @template.render :partial => partial, :locals => {:tab => self}
+        elsif @link_url
+          @template.link_to @name, @link_url, @link_options
         else
-          @template.content_tag :span, @text
+          @template.content_tag :span, @name
         end
       end
     end

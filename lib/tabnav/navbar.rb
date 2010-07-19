@@ -7,7 +7,10 @@ module Tabnav
       @tabs = []
     end
 
+    attr_writer :tab_content_partial
+
     def add_tab(options = {})
+      options[:tab_content_partial] = @tab_content_partial if @tab_content_partial
       t = Tab.new(@template, @params, options)
       yield t
       @tabs << t

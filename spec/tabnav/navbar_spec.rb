@@ -24,6 +24,16 @@ describe Tabnav::Navbar do
         t.should == t
       end
     end
+
+    it "should add the custom partial to the options if set" do
+      n = Tabnav::Navbar.new(@template, {})
+      n.tab_content_partial = 'my_partial'
+      t = Tabnav::Tab.new(@template, {})
+      Tabnav::Tab.should_receive(:new).with(@template, {}, {:id => "my_id", :tab_content_partial => 'my_partial'}).and_return(t)
+      n.add_tab :id => "my_id" do |t|
+        t.should == t
+      end
+    end
   end
 
   describe "render" do

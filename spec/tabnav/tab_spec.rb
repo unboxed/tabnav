@@ -2,6 +2,26 @@ require 'spec_helper'
 
 describe Tabnav::Tab do
 
+  describe "accessors" do
+    before :each do
+      @tab = Tabnav::Tab.new(nil, {})
+      @tab.named "A Tab"
+      @tab.links_to "/somewhere", :target => "_blank"
+    end
+
+    it "should have a name accessor" do
+      @tab.name.should == "A Tab"
+    end
+
+    it "should have a link_url accessor" do
+      @tab.link_url.should == "/somewhere"
+    end
+
+    it "should have a link_options accessor" do
+      @tab.link_options.should == {:target => "_blank"}
+    end
+  end
+
   describe "render" do
     before :each do
       @template = ActionView::Base.new()
@@ -52,82 +72,94 @@ describe Tabnav::Tab do
       html.should == "<li>A Link</li>"
     end
 
-    describe "highlighting rules" do
-      describe "active logic" do
-        describe "params based rules" do
-          it "should be active if all the optons in the rule match the params" do
-            params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
-            t = Tabnav::Tab.new(@template, params)
-            t.highlights_on "key1" => "a_value", "key2" => "another_value"
-            t.should be_active
-          end
+    context "with a custom partial" do
+      it "should render the partial, assigning the tab" do
+        t = Tabnav::Tab.new(@template, {}, :tab_content_partial => 'my_partial')
+        t.named "A Tab"
+        @template.should_receive(:render).with(:partial => 'my_partial', :locals => {:tab => t}).and_return("Custom tab markup")
+        t.render.should == "<li>Custom tab markup</li>"
+      end
+    end
+  end
 
-          it "should not be active if only some of the values match" do
-            params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
-            t = Tabnav::Tab.new(@template, params)
-            t.highlights_on "key1" => "a_value", "key2" => "a different value"
-            t.should_not be_active
-          end
-
-          it "should not be active if some of the values are missing" do
-            params = {"key1" => "a_value", "key3" => "something else"}
-            t = Tabnav::Tab.new(@template, params)
-            t.highlights_on "key1" => "a_value", "key2" => "another_value"
-            t.should_not be_active
-          end
-
-          it "should be active if any of the rules match" do
-            params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
-            t = Tabnav::Tab.new(@template, params)
-            t.highlights_on "key1" => "a_value", "key2" => "a different value"
-            t.highlights_on "key1" => "a_value"
-            t.highlights_on "key2" => "wibble"
-            t.should be_active
-          end
-
-          it "should treat strings ans symobls at matching" do
-            params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
-            t = Tabnav::Tab.new(@template, params)
-            t.highlights_on :key1 => "a_value", :key2 => :another_value
-            t.should be_active
-          end
+  describe "highlighting rules" do
+    describe "active logic" do
+      describe "params based rules" do
+        it "should be active if all the optons in the rule match the params" do
+          params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
+          t = Tabnav::Tab.new(@template, params)
+          t.highlights_on "key1" => "a_value", "key2" => "another_value"
+          t.should be_active
         end
 
-        describe "proc based rules" do
-          it "should be active if the proc returns true" do
-            t = Tabnav::Tab.new(@template, {})
-            t.highlights_on Proc.new { true }
-            t.should be_active
-          end
+        it "should not be active if only some of the values match" do
+          params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
+          t = Tabnav::Tab.new(@template, params)
+          t.highlights_on "key1" => "a_value", "key2" => "a different value"
+          t.should_not be_active
+        end
 
-          it "should not be active if the proc returns false" do
-            t = Tabnav::Tab.new(@template, {})
-            t.highlights_on Proc.new { false }
-            t.should_not be_active
-          end
+        it "should not be active if some of the values are missing" do
+          params = {"key1" => "a_value", "key3" => "something else"}
+          t = Tabnav::Tab.new(@template, params)
+          t.highlights_on "key1" => "a_value", "key2" => "another_value"
+          t.should_not be_active
+        end
 
-          it "should co-erce the result of the proc to a boolean" do
-            t = Tabnav::Tab.new(@template, {})
-            t.highlights_on Proc.new { "wibble" }
-            t.active?.should == true
-          end
+        it "should be active if any of the rules match" do
+          params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
+          t = Tabnav::Tab.new(@template, params)
+          t.highlights_on "key1" => "a_value", "key2" => "a different value"
+          t.highlights_on "key1" => "a_value"
+          t.highlights_on "key2" => "wibble"
+          t.should be_active
+        end
+
+        it "should treat strings ans symobls at matching" do
+          params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
+          t = Tabnav::Tab.new(@template, params)
+          t.highlights_on :key1 => "a_value", :key2 => :another_value
+          t.should be_active
         end
       end
 
-      describe "output" do
-        it "should set the class of the li to active if the tab is highlighted" do
+      describe "proc based rules" do
+        it "should be active if the proc returns true" do
           t = Tabnav::Tab.new(@template, {})
-          t.named "A Tab"
-          t.stub!(:active?).and_return(true)
-          t.render.should == '<li class="active"><span>A Tab</span></li>'
+          t.highlights_on Proc.new { true }
+          t.should be_active
         end
 
-        it "should merge active with the other classes if highlighted" do
-          t = Tabnav::Tab.new(@template, {}, {:class => "my_class"})
-          t.named "A Tab"
-          t.stub!(:active?).and_return(true)
-          t.render.should == '<li class="my_class active"><span>A Tab</span></li>'
+        it "should not be active if the proc returns false" do
+          t = Tabnav::Tab.new(@template, {})
+          t.highlights_on Proc.new { false }
+          t.should_not be_active
         end
+
+        it "should co-erce the result of the proc to a boolean" do
+          t = Tabnav::Tab.new(@template, {})
+          t.highlights_on Proc.new { "wibble" }
+          t.active?.should == true
+        end
+      end
+    end
+
+    describe "output" do
+      before :each do
+        @template = ActionView::Base.new()
+      end
+      it "should set the class of the li to active if the tab is highlighted" do
+        t = Tabnav::Tab.new(@template, {})
+        t.named "A Tab"
+        t.stub!(:active?).and_return(true)
+        t.render.should == '<li class="active"><span>A Tab</span></li>'
+      end
+
+      it "should merge active with the other classes if highlighted" do
+        t = Tabnav::Tab.new(@template, {}, {:class => "my_class"})
+        t.named "A Tab"
+        t.stub!(:active?).and_return(true)
+        t.render.should == '<li class="my_class active"><span>A Tab</span></li>'
       end
     end
   end
