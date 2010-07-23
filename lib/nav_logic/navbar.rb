@@ -1,4 +1,4 @@
-module Tabnav
+module NavLogic
   class Navbar
     def initialize(template, params, options = {})
       @template = template

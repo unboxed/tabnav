@@ -1,4 +1,4 @@
-module Tabnav
+module NavLogic
   module Helper
     def render_tabnav(options = {})
       n = Navbar.new(self, params, options)

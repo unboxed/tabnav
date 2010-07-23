@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Tabnav::Helper, :type => :helper do
+describe NavLogic::Helper, :type => :helper do
   before :each do
     helper.output_buffer = ''
   end
@@ -162,7 +162,7 @@ describe Tabnav::Helper, :type => :helper do
     it "should allow sppecifying a custom partial for rendering the tabs" do
       helper.should_receive(:render).twice do |args|
         args[:partial].should == '/tab_content'
-        args[:locals][:tab].should be_a(Tabnav::Tab)
+        args[:locals][:tab].should be_a(NavLogic::Tab)
         "Custom markup for #{args[:locals][:tab].name}"
       end
       helper.render_tabnav do |n|

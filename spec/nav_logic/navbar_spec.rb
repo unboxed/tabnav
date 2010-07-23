@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Tabnav::Navbar do
+describe NavLogic::Navbar do
 
   describe "add_tab" do
     before :each do
@@ -8,28 +8,28 @@ describe Tabnav::Navbar do
     end
 
     it "should create a new tab with the passed template and params and yield it to the block" do
-      n = Tabnav::Navbar.new(@template, {"foo" => "bar"})
-      t = Tabnav::Tab.new(@template, {})
-      Tabnav::Tab.should_receive(:new).with(@template, {"foo" => "bar"}, {}).and_return(t)
+      n = NavLogic::Navbar.new(@template, {"foo" => "bar"})
+      t = NavLogic::Tab.new(@template, {})
+      NavLogic::Tab.should_receive(:new).with(@template, {"foo" => "bar"}, {}).and_return(t)
       n.add_tab do |t|
         t.should == t
       end
     end
 
     it "should create the tab with any passed options" do
-      n = Tabnav::Navbar.new(@template, {})
-      t = Tabnav::Tab.new(@template, {})
-      Tabnav::Tab.should_receive(:new).with(@template, {}, {:class => "my_class", :id => "my_id"}).and_return(t)
+      n = NavLogic::Navbar.new(@template, {})
+      t = NavLogic::Tab.new(@template, {})
+      NavLogic::Tab.should_receive(:new).with(@template, {}, {:class => "my_class", :id => "my_id"}).and_return(t)
       n.add_tab :class => "my_class", :id => "my_id" do |t|
         t.should == t
       end
     end
 
     it "should add the custom partial to the options if set" do
-      n = Tabnav::Navbar.new(@template, {})
+      n = NavLogic::Navbar.new(@template, {})
       n.tab_content_partial = 'my_partial'
-      t = Tabnav::Tab.new(@template, {})
-      Tabnav::Tab.should_receive(:new).with(@template, {}, {:id => "my_id", :tab_content_partial => 'my_partial'}).and_return(t)
+      t = NavLogic::Tab.new(@template, {})
+      NavLogic::Tab.should_receive(:new).with(@template, {}, {:id => "my_id", :tab_content_partial => 'my_partial'}).and_return(t)
       n.add_tab :id => "my_id" do |t|
         t.should == t
       end
@@ -42,12 +42,12 @@ describe Tabnav::Navbar do
     end
 
     it "should output nothing if no tabs have been added" do
-      n = Tabnav::Navbar.new(@template, {})
+      n = NavLogic::Navbar.new(@template, {})
       n.render.should == ''
     end
 
     it "should output a ul containing the results of rendering each of it's tabs" do
-      n = Tabnav::Navbar.new(@template, {})
+      n = NavLogic::Navbar.new(@template, {})
       t1 = t2 = nil
       n.add_tab do |t|
         t1 = t
@@ -61,7 +61,7 @@ describe Tabnav::Navbar do
     end
 
     it "should pass the options given on creation to the ul" do
-      n = Tabnav::Navbar.new(@template, {}, :id => "my_id", :class => "my_class")
+      n = NavLogic::Navbar.new(@template, {}, :id => "my_id", :class => "my_class")
       t1 = nil
       n.add_tab do |t|
         t1 = t

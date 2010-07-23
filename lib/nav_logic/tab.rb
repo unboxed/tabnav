@@ -1,4 +1,4 @@
-module Tabnav
+module NavLogic
   class Tab
 
     def initialize(template, params, html_options = {})
