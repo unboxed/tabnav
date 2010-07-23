@@ -4,11 +4,11 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "tabnav"
+    gem.name = "nav_logic"
     gem.summary = %Q{Rails helper for generating navbars}
     gem.description = %Q{Rails helper for generating navbars in a declarative manner}
     gem.email = "github@unboxedconsulting.com"
-    gem.homepage = "http://github.com/unboxed/tabnav"
+    gem.homepage = "http://github.com/unboxed/nav_logic"
     gem.authors = ["Unboxed"]
     gem.add_dependency "actionpack", ">= 2.3.2"
     gem.add_development_dependency "rspec", ">= 1.2.9"
@@ -40,7 +40,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "tabnav #{version}"
+  rdoc.title = "nav_logic #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
