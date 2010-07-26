@@ -1,6 +1,76 @@
-= tabnav
+= Tabnav
 
-Description goes here.
+Tabnav is a helper for generating navigation bars. It allows you to simply specify highlighting rules for each tab.
+
+== Some Examples
+
+=== Simple Example
+
+In your view:
+
+  <%
+    render_tabnav do |n|
+      n.add_tab do |t|
+        t.named "Home"
+        t.links_to root_path
+        t.highlights_on :controller => :home, :action => :index
+      end
+      n.add_tab do |t|
+        t.named "Froobles"
+        t.links_to froobles_path
+        t.highlights_on :controller => :froobles
+      end
+    end
+  %>
+
+On home/index will output:
+
+  <ul>
+    <li class="active"><a href="/">Home</a></li>
+    <li><a href="/froobles">Froobles</a></li>
+  </ul>
+
+On any action in FrooblesController will output:
+
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li class="active"><a href="/froobles">Froobles</a></li>
+  </ul>
+
+See Tabnav::Tab#highlights_on for details of the highlighting logic.
+
+=== Options for controlling markup
+
+View:
+
+  <%
+    render_tabnav :id => "main_navigation", :class => "clearfix" do |n|
+      n.add_tab :class => "home_tab" do |t|
+        t.named "Home"
+        t.links_to root_path
+        t.highlights_on :controller => :home, :action => :index
+      end
+      n.add_tab :class => "heading" do |t|
+        t.named "Froobles Heading"
+        t.highlights_on :controller => :froobles
+      end
+      n.add_tab do |t|
+        t.named "Froobles"
+        t.links_to froobles_path, :target => "_blank", :rel => "http://foo.bar/"
+        t.highlights_on :controller => :froobles, :action => :index
+      end
+    end
+  %>
+
+On froobles/index will output:
+
+  <ul id="main_navigation" class="clearfix">
+    <li class="home_tab"><a href="/">Home</a></li>
+    <li class="heading active"><span>Froobles Heading</span></li>
+    <li class="active"><a href="/froobles" target="_blank" rel="http://foo.bar/">Froobles</a></li>
+  </ul>
+
+-----
 
 == Note on Patches/Pull Requests
  
@@ -8,7 +78,7 @@ Description goes here.
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a
   future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
+* Commit, do not mess with Rakefile, gemspec, version, or history.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 

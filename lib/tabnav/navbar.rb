@@ -1,6 +1,6 @@
 module Tabnav
   class Navbar
-    def initialize(template, params, options = {})
+    def initialize(template, params, options = {}) # :nodoc:
       @template = template
       @params = params
       @html_options = options
@@ -9,6 +9,11 @@ module Tabnav
 
     attr_writer :tab_content_partial
 
+    # Creates a Tab and adds it to the navbar.
+    #
+    # +options+ is an option hash of options which will be used to create the +li+ for the tab.
+    #
+    # yields the created Tab
     def add_tab(options = {})
       options[:tab_content_partial] = @tab_content_partial if @tab_content_partial
       t = Tab.new(@template, @params, options)
@@ -16,7 +21,7 @@ module Tabnav
       @tabs << t
     end
 
-    def render
+    def render # :nodoc:
       return '' if @tabs.empty?
       @template.content_tag :ul, @html_options do
         contents = ''
