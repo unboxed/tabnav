@@ -37,7 +37,7 @@ On any action in FrooblesController will output:
     <li class="active"><a href="/froobles">Froobles</a></li>
   </ul>
 
-See Tabnav::Tab#highlights_on for details of the highlighting logic.
+See Tabnav::Tab#highlights_on for full details of the highlighting logic.
 
 === Options for controlling markup
 
@@ -68,6 +68,52 @@ On froobles/index will output:
     <li class="home_tab"><a href="/">Home</a></li>
     <li class="heading active"><span>Froobles Heading</span></li>
     <li class="active"><a href="/froobles" target="_blank" rel="http://foo.bar/">Froobles</a></li>
+  </ul>
+
+=== Custom tab partial
+
+It is also possible to specify a partial to be used to generate the tab contents.  e.g.:
+
+View:
+
+  <%
+    render_tabnav :html => {:id => "main_navigation", :class => "clearfix"} do |n|
+      n.tab_partial "/shared/my_custom_tab"
+      n.add_tab :html => {:class => "home_tab"} do |t|
+        t.named "Home"
+        t.links_to root_path
+        t.highlights_on :controller => :home, :action => :index
+      end
+      n.add_tab :html => {:class => "heading"} do |t|
+        t.named "Froobles Heading"
+        t.highlights_on :controller => :froobles
+      end
+      n.add_tab do |t|
+        t.named "Froobles"
+        t.links_to froobles_path, :target => "_blank", :rel => "http://foo.bar/"
+        t.highlights_on :controller => :froobles, :action => :index
+      end
+    end
+  %>
+
+In the partial, +tab+ will be the Tab instance to be rendered.
+
+in /app/views/shared/_my_custom_tab.html.erb:
+
+  <div class="my_custom_class">
+    <%- if tab.has_link? -%>
+      <%= link_to tab.name, tab.url %>
+    <%- else -%>
+      <span><%= tab.name %></span>
+    <%- end -%>
+  </div>
+
+On froobles/index the output will be:
+
+  <ul id="main_navigation" class="clearfix">
+    <li class="home_tab"><div class="my_custom_class"><a href="/">Home</a></div></li>
+    <li class="heading active"><div class="my_custom_class"><span>Froobles Heading</span></div></li>
+    <li class="active"><div class="my_custom_class"><a href="/froobles">Froobles</a></div></li>
   </ul>
 
 -----

@@ -9,7 +9,14 @@ module Tabnav
       @active = false
     end
 
-    attr_accessor :name, :link_url, :link_options
+    # The name of this tab
+    attr_accessor :name
+
+    # The link destination
+    attr_accessor :link_url
+
+    # The link options (if any)
+    attr_accessor :link_options
 
     # Sets the name of this tab.  This will be used as the contents of the link or span
     def named(text)

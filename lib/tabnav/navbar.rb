@@ -7,11 +7,12 @@ module Tabnav
       @tabs = []
     end
 
+    # Optionally specifies a partial to be used to render the tab content.
     attr_writer :tab_content_partial
 
     # Creates a Tab and adds it to the navbar.
     #
-    # +options+ is an option hash of options which will be used to create the +li+ for the tab.
+    # +options+ is an optional hash of options which will be used to create the +li+ for the tab.
     #
     # yields the created Tab
     def add_tab(options = {})
