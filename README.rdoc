@@ -2,6 +2,9 @@
 
 Tabnav is a helper for generating navigation bars. It allows you to simply specify highlighting rules for each tab.
 
+* Homepage: http://github.com/unboxed/tabnav
+* Issues: http://github.com/unboxed/tabnav/issues
+
 == Some Examples
 
 === Simple Example
@@ -37,7 +40,7 @@ On any action in FrooblesController will output:
     <li class="active"><a href="/froobles">Froobles</a></li>
   </ul>
 
-See Tabnav::Tab#highlights_on for full details of the highlighting logic.
+See the highlights_on method of Tabnav::Tab for full details of the highlighting logic.
 
 === Options for controlling markup
 
