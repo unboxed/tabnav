@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Unboxed"]
-  s.date = %q{2010-07-25}
+  s.date = %q{2010-07-28}
   s.description = %q{Rails helper for generating navbars in a declarative manner}
   s.email = %q{github@unboxedconsulting.com}
   s.extra_rdoc_files = [
@@ -22,9 +22,6 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
-     "doc/ideas/basic_flat_navbar.html.erb",
-     "doc/ideas/custom_tab partial.html.erb",
-     "doc/ideas/nested_versions.html.erb",
      "lib/tabnav.rb",
      "lib/tabnav/helper.rb",
      "lib/tabnav/navbar.rb",

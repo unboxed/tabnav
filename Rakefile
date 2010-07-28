@@ -13,7 +13,7 @@ begin
     gem.add_dependency "actionpack", ">= 2.3.2"
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.add_development_dependency "rspec-rails", ">= 1.2.9"
-    gem.files.exclude "*.gemspec", '.gitignore'
+    gem.files.exclude "*.gemspec", '.gitignore', 'doc/*'
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
