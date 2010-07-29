@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{tabnav}
-  s.version = "1.0.0"
+  s.version = "1.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Unboxed"]
-  s.date = %q{2010-07-28}
+  s.date = %q{2010-07-29}
   s.description = %q{Rails helper for generating navbars in a declarative manner}
   s.email = %q{github@unboxedconsulting.com}
   s.extra_rdoc_files = [
