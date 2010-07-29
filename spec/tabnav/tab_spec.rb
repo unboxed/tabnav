@@ -121,6 +121,13 @@ describe Tabnav::Tab do
           t.highlights_on :key1 => "a_value", :key2 => :another_value
           t.should be_active
         end
+
+        it "should allow matching against nil" do
+          params = {"key1" => "a_value", "key2" => "another_value", "key3" => "something else"}
+          t = Tabnav::Tab.new(@template, params)
+          t.highlights_on :key4 => nil
+          t.should be_active
+        end
       end
 
       describe "proc based rules" do

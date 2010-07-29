@@ -41,7 +41,7 @@ module Tabnav
     # If multiple highlight conditions are given, the tab will be highlighted if any of them match.
     def highlights_on(rule)
       if rule.is_a?(Hash)
-        @active |= rule.with_indifferent_access.all? {|k, v| @params[k] == v.to_s}
+        @active |= rule.with_indifferent_access.all? {|k, v| @params[k].to_s == v.to_s}
       elsif rule.is_a?(Proc)
         @active |= rule.call
       end
