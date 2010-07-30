@@ -6,7 +6,6 @@ describe Tabnav::Tab do
     before :each do
       @tab = Tabnav::Tab.new(nil, {})
       @tab.named "A Tab"
-      @tab.links_to "/somewhere", :target => "_blank"
     end
 
     it "should have a name accessor" do
@@ -14,11 +13,24 @@ describe Tabnav::Tab do
     end
 
     it "should have a link_url accessor" do
+      @tab.links_to "/somewhere", :target => "_blank"
       @tab.link_url.should == "/somewhere"
     end
 
     it "should have a link_options accessor" do
+      @tab.links_to "/somewhere", :target => "_blank"
       @tab.link_options.should == {:target => "_blank"}
+    end
+
+    describe "has_link?" do
+      it "should return true if a link url has been set" do
+        @tab.links_to "/somewhere"
+        @tab.has_link?.should == true
+      end
+
+      it "should return false otherwise" do
+        @tab.has_link?.should == false
+      end
     end
   end
 

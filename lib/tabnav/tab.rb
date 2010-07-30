@@ -18,6 +18,11 @@ module Tabnav
     # The link options (if any)
     attr_accessor :link_options
 
+    # Returns true if this tab has had a link set on it.
+    def has_link?
+      !! @link_url
+    end
+
     # Sets the name of this tab.  This will be used as the contents of the link or span
     def named(text)
       @name = text
@@ -58,7 +63,7 @@ module Tabnav
       @template.content_tag(:li, @html_options) do
         if partial
           @template.render :partial => partial, :locals => {:tab => self}
-        elsif @link_url
+        elsif has_link?
           @template.link_to @name, @link_url, @link_options
         else
           @template.content_tag :span, @name
