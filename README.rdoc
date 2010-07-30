@@ -105,7 +105,7 @@ in /app/views/shared/_my_custom_tab.html.erb:
 
   <div class="my_custom_class">
     <%- if tab.has_link? -%>
-      <%= link_to tab.name, tab.url %>
+      <%= link_to tab.name, tab.link_url %>
     <%- else -%>
       <span><%= tab.name %></span>
     <%- end -%>
