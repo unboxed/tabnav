@@ -38,6 +38,19 @@ describe Tabnav::Helper, :type => :helper do
           '<li class="heading"><span>Froobles Heading</span></li>' +
           '<li><a href="/froobles" rel="http://foo.bar/" target="_blank">Froobles</a></li></ul>'
     end
+
+    it "should return nil (avoid double render bug)" do
+      helper.render_tabnav do |n|
+        n.add_tab do |t|
+          t.named "Home"
+          t.links_to "/"
+        end
+        n.add_tab do |t|
+          t.named "Froobles"
+          t.links_to "/froobles"
+        end
+      end.should == nil
+    end
   end
 
   describe "highlighting logic" do

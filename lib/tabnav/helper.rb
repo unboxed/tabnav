@@ -12,6 +12,7 @@ module Tabnav
       n = Navbar.new(self, params, options)
       yield(n)
       concat( n.render )
+      nil
     end
   end
 end
