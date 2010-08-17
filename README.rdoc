@@ -121,6 +121,10 @@ On froobles/index the output will be:
 
 -----
 
+== Attributions
+
+The concept for this is based on the tabnav component from rails_widgets: http://github.com/paolodona/rails-widgets
+
 == Note on Patches/Pull Requests
  
 * Fork the project.
