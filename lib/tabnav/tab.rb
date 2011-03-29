@@ -58,17 +58,28 @@ module Tabnav
     end
 
     def render # :nodoc:
-      @html_options[:class] = "#{@html_options[:class]} active".strip if self.active?
+      # @link_options[:class] = "#{@link_options[:class]} active".strip if self.active?
+      @link_options[:class] = self.active? ? "#{@html_options[:class]} active".strip : @html_options[:class]
+      
       partial = @html_options.delete(:tab_content_partial)
-      @template.content_tag(:li, @html_options) do
-        if partial
-          @template.render :partial => partial, :locals => {:tab => self}
-        elsif has_link?
-          @template.link_to @name, @link_url, @link_options
-        else
-          @template.content_tag :span, @name
-        end
+      
+      # @template.content_tag(:li, @html_options) do
+      #   if partial
+      #     @template.render :partial => partial, :locals => {:tab => self}
+      #   elsif has_link?
+      #     @template.link_to @name, @link_url, @link_options
+      #   else
+      #     @template.content_tag :span, @name
+      #   end
+      # end
+      if partial
+        @template.render :partial => partial, :locals => {:tab => self}
+      elsif has_link?
+        @template.link_to @name, @link_url, @link_options
+      else
+        @template.content_tag :span, @name
       end
+    
     end
   end
 end
