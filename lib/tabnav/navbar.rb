@@ -29,7 +29,7 @@ module Tabnav
         @tabs.each do |tab|
           contents += tab.render
         end
-        contents
+        contents.html_safe
       end
     end
   end
