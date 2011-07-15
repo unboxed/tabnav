@@ -56,14 +56,14 @@ describe Tabnav::Helper, :type => :helper do
   describe "highlighting logic" do
     context "params based rules" do
       it "should highlight the tab if the rules match the params hash" do
-        params[:controller] = 'home'
-        params[:action] = 'index'
-        params[:foo] = 'bar'
+        controller.params["controller"] = 'home'
+        controller.params["action"] = 'index'
+        controller.params["foo"] = 'bar'
         helper.render_tabnav :id => "main_navigation", :class => "clearfix" do |n|
           n.add_tab :class => "home_tab" do |t|
             t.named "Home"
             t.links_to '/'
-            t.highlights_on :controller => :home, :action => :index
+            t.highlights_on :controller => 'home', :action => 'index'
           end
           n.add_tab :class => "heading" do |t|
             t.named "Froobles Heading"
@@ -81,9 +81,9 @@ describe Tabnav::Helper, :type => :helper do
       end
 
       it "should allow multiple tabs to be active at once" do
-        params[:controller] = 'froobles'
-        params[:action] = 'index'
-        params[:foo] = 'bar'
+        controller.params['controller'] = 'froobles'
+        controller.params['action'] = 'index'
+        controller.params['foo'] = 'bar'
         helper.render_tabnav do |n|
           n.add_tab :class => "home_tab" do |t|
             t.named "Home"
@@ -106,9 +106,9 @@ describe Tabnav::Helper, :type => :helper do
       end
 
       it "should highlight tabs where any of the highlighting rules match" do
-        params[:controller] = 'home'
-        params[:action] = 'froobles'
-        params[:foo] = 'bar'
+        controller.params['controller'] = 'home'
+        controller.params['action'] = 'froobles'
+        controller.params['foo'] = 'bar'
         helper.render_tabnav do |n|
           n.add_tab do |t|
             t.named "Home"
@@ -145,9 +145,9 @@ describe Tabnav::Helper, :type => :helper do
     end
 
     it "should allow a mixture of rule types" do
-      params[:controller] = 'home'
-      params[:action] = 'index'
-      params[:foo] = 'bar'
+      controller.params['controller'] = 'home'
+      controller.params['action'] = 'index'
+      controller.params['foo'] = 'bar'
       helper.render_tabnav do |n|
         n.add_tab :class => "home_tab" do |t|
           t.named "Home"

@@ -11,7 +11,7 @@ describe Tabnav::Helper, :type => :helper do
       helper.output_buffer = ''
     end
     it "should create a new navbar with the template and params and yield it to the block" do
-      params[:foo] = "bar"
+      controller.params["foo"] = "bar"
       Tabnav::Navbar.should_receive(:new).with(@template, {"foo" => "bar"}, {}).and_return(@navbar)
       helper.render_tabnav do |n|
         n.should == @navbar
