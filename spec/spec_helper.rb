@@ -4,17 +4,7 @@ require 'rubygems'
 require 'action_controller'
 require 'tabnav'
 
-require 'spec'
-require 'spec/autorun'
+require 'rspec'
 
-# The parts of rspec-rails necessary to use helper example groups
-class ApplicationController < ActionController::Base
-end
-require 'active_support/test_case'
-require 'spec/test/unit'
-require 'spec/rails/example'
-require 'spec/rails/interop/testcase'
+require 'rspec/rails'
 
-Spec::Runner.configure do |config|
-
-end

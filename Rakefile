@@ -11,8 +11,8 @@ begin
     gem.homepage = "http://github.com/unboxed/tabnav"
     gem.authors = ["Unboxed"]
     gem.add_dependency "actionpack", ">= 2.3.2"
-    gem.add_development_dependency "rspec", ">= 1.2.9"
-    gem.add_development_dependency "rspec-rails", ">= 1.2.9"
+    gem.add_development_dependency "rspec", "~> 2.6.0"
+    gem.add_development_dependency "rspec-rails", "~> 2.6.1"
     gem.files.exclude "*.gemspec", '.gitignore', 'doc/*'
   end
   Jeweler::GemcutterTasks.new
@@ -20,17 +20,8 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
-require 'spec/rake/spectask'
-Spec::Rake::SpecTask.new(:spec) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.spec_files = FileList['spec/**/*_spec.rb']
-end
-
-Spec::Rake::SpecTask.new(:rcov) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
-end
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
 
 task :spec => :check_dependencies
 
