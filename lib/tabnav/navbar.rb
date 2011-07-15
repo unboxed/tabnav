@@ -25,11 +25,11 @@ module Tabnav
     def render # :nodoc:
       return '' if @tabs.empty?
       @template.content_tag :ul, @html_options do
-        contents = ''
+        contents = ''.html_safe
         @tabs.each do |tab|
           contents += tab.render
         end
-        contents.html_safe
+        contents
       end
     end
   end
