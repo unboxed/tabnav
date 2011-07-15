@@ -27,7 +27,7 @@ module Tabnav
       @template.content_tag :ul, @html_options do
         contents = ''.html_safe
         @tabs.each do |tab|
-          contents += tab.render
+          contents << tab.render
         end
         contents
       end
