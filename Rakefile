@@ -10,7 +10,7 @@ begin
     gem.email = "github@unboxedconsulting.com"
     gem.homepage = "http://github.com/unboxed/tabnav"
     gem.authors = ["Unboxed"]
-    gem.add_dependency "actionpack", ">= 2.3.2"
+    gem.add_dependency "actionpack", ">= 2.3.8"
     gem.add_development_dependency "rspec", "~> 2.6.0"
     gem.add_development_dependency "rspec-rails", "~> 2.6.1"
     gem.files.exclude "*.gemspec", '.gitignore', 'doc/*'
