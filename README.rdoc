@@ -193,4 +193,4 @@ The concept for this is based on the tabnav component from rails_widgets: http:/
 
 == Copyright
 
-Copyright (c) 2010 Unboxed. See LICENSE for details.
+Copyright (c) 2011 {Unboxed Consulting}[http://www.unboxedconsulting.com/]. See LICENSE for details.
