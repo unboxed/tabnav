@@ -2,6 +2,7 @@ module Tabnav
   class Tab
 
     def initialize(template, params, html_options = {}) # :nodoc:
+      @partial = html_options.delete(:tab_content_partial)
       @html_options = html_options
       @params = params
       @template = template
@@ -52,22 +53,27 @@ module Tabnav
       end
     end
 
-    # Returns +true+ of this tab is highlighted.
+    # Returns +true+ if this tab is highlighted.
     def active?
       @active
     end
 
     def render # :nodoc:
       @html_options[:class] = "#{@html_options[:class]} active".strip if self.active?
-      partial = @html_options.delete(:tab_content_partial)
       @template.content_tag(:li, @html_options) do
-        if partial
-          @template.render :partial => partial, :locals => {:tab => self}
-        elsif has_link?
-          @template.link_to @name, @link_url, @link_options
-        else
-          @template.content_tag :span, @name
-        end
+        render_tab
+      end
+    end
+
+    private
+
+    def render_tab
+      if @partial
+        @template.render :partial => @partial, :locals => {:tab => self}
+      elsif has_link?
+        @template.link_to @name, @link_url, @link_options
+      else
+        @template.content_tag :span, @name
       end
     end
   end
