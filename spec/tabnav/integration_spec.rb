@@ -231,6 +231,41 @@ describe Tabnav::Helper, :type => :helper do
         '</li><li><a href="/somewhere">Something Else</a></li></ul>'
     end
 
+    it "should allow specifying class/id on a nested navbar" do
+      helper.render_tabnav do |n|
+        n.add_tab do |t|
+          t.named "Home"
+          t.links_to '/'
+          t.highlights_on :controller => :home, :action => :index
+        end
+
+        n.add_sub_nav :id => 'froobles' do |sn|
+          sn.named "Froobles"
+
+          sn.add_tab do |t|
+            t.named "All Froobles"
+            t.links_to '/froobles'
+            t.highlights_on :controller => :froobles, :action => :index
+          end
+
+          sn.add_tab do |t|
+            t.named "New Frooble"
+            t.links_to '/froobles/new'
+            t.highlights_on :controller => :froobles, :action => :new
+            t.highlights_on :controller => :froobles, :action => :create
+          end
+        end
+
+        n.add_tab do |t|
+          t.named "Something Else"
+          t.links_to "/somewhere"
+        end
+      end
+      helper.output_buffer.should == '<ul><li><a href="/">Home</a></li><li id="froobles"><span>Froobles</span>' +
+        '<ul><li><a href="/froobles">All Froobles</a></li><li><a href="/froobles/new">New Frooble</a></li></ul>' +
+        '</li><li><a href="/somewhere">Something Else</a></li></ul>'
+    end
+
     it "highlighting logic should work on a subnavbar" do
       controller.params['controller'] = 'wibble'
       helper.render_tabnav do |n|

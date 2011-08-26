@@ -12,14 +12,14 @@ describe Tabnav::Helper, :type => :helper do
     end
     it "should create a new navbar with the template and params and yield it to the block" do
       controller.params["foo"] = "bar"
-      Tabnav::Navbar.should_receive(:new).with(@template, {"foo" => "bar"}, {}).and_return(@navbar)
+      Tabnav::Navbar.should_receive(:new).with(@template, {"foo" => "bar"}, anything()).and_return(@navbar)
       helper.render_tabnav do |n|
         n.should == @navbar
       end
     end
 
-    it "should create a new navbar with any passed options" do
-      Tabnav::Navbar.should_receive(:new).with(@template, {}, {:class => "my_class", :id => "my_id"}).and_return(@navbar)
+    it "should create a new navbar with any passed options setting it to be the top-level navbar" do
+      Tabnav::Navbar.should_receive(:new).with(@template, {}, {:class => "my_class", :id => "my_id", :top_level => true}).and_return(@navbar)
       helper.render_tabnav :class => "my_class", :id => "my_id" do |n|
         n.should == @navbar
       end

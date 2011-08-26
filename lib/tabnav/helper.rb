@@ -9,7 +9,7 @@ module Tabnav
     #
     # Finally, this renders the navbar, and concats the result into the view.
     def render_tabnav(options = {})
-      n = Navbar.new(self, params, options)
+      n = Navbar.new(self, params, options.merge(:top_level => true))
       yield(n)
       concat( n.render_navbar )
       nil

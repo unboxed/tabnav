@@ -100,13 +100,23 @@ describe Tabnav::Navbar do
       n.render_navbar.should == '<ul>Tab 1 markupTab 2 markup</ul>'
     end
 
-    it "should pass the options given on creation to the ul" do
-      n = Tabnav::Navbar.new(@template, {}, :id => "my_id", :class => "my_class")
+    it "should pass the options given on creation to the ul when it's the top-level navbar" do
+      n = Tabnav::Navbar.new(@template, {}, :id => "my_id", :class => "my_class", :top_level => true)
       t1 = nil
       n.add_tab do |t|
         t1 = t
       end
       @template.should_receive(:content_tag).with(:ul, {:id => "my_id", :class => "my_class"}).and_return(:some_markup)
+      n.render_navbar.should == :some_markup
+    end
+
+    it "should not pass the options to the ul when it's not the top-level navbar" do
+      n = Tabnav::Navbar.new(@template, {}, :id => "my_id", :class => "my_class")
+      t1 = nil
+      n.add_tab do |t|
+        t1 = t
+      end
+      @template.should_receive(:content_tag).with(:ul, nil).and_return(:some_markup)
       n.render_navbar.should == :some_markup
     end
   end
