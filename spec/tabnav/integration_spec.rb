@@ -264,6 +264,7 @@ describe Tabnav::Helper, :type => :helper do
     end
 
     it "highlighting logic should activate the subnavbar if any inner tabs are active" do
+      pending "Is this actually the functionality we want?"
       controller.params['controller'] = 'froobles'
       controller.params['action'] = 'new'
       helper.render_tabnav do |n|
@@ -326,8 +327,8 @@ describe Tabnav::Helper, :type => :helper do
           end
         end
       end
-      helper.output_buffer.should == '<ul><li><a href="/">Home</a></li><li class="active"><span>Foo</span>' +
-          '<ul><li><a href="/foos">All Foos</a></li><li class="active">' +
+      helper.output_buffer.should == '<ul><li><a href="/">Home</a></li><li><span>Foo</span>' +
+          '<ul><li><a href="/foos">All Foos</a></li><li>' +
             '<a href="/foos/bars">Bars</a>' + 
             '<ul><li><a href="/foos/bars/new">New Bar</a></li><li class="active"><span>Wibble</span></li></ul>' + 
           '</li></ul>' +
