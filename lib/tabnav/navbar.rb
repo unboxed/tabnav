@@ -1,5 +1,5 @@
 module Tabnav
-  class Navbar
+  class Navbar < Tab
     def initialize(template, params, options = {}) # :nodoc:
       @template = template
       @params = params

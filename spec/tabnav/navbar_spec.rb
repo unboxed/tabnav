@@ -70,6 +70,12 @@ describe Tabnav::Navbar do
     end
   end
 
+  describe "Tab behaviour" do
+    it "should be a subclass of Tab" do
+      Tabnav::Navbar.new(nil, nil).should be_a(Tabnav::Tab)
+    end
+  end
+
   describe "render_navbar" do
     before :each do
       @template = ActionView::Base.new()
