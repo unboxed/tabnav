@@ -15,18 +15,12 @@ module Tabnav
     # +options+ is an optional hash of options which will be used to create the +li+ for the tab.
     #
     # yields the created Tab
-    def add_tab(options = {})
-      options[:tab_content_partial] = @tab_content_partial if @tab_content_partial
-      t = Tab.new(@template, @params, options)
-      yield t
-      @tabs << t
+    def add_tab(options = {}, &block)
+      add_item(Tab, options, &block)
     end
 
     def add_sub_nav(options = {}, &block)
-      options[:tab_content_partial] = @tab_content_partial if @tab_content_partial
-      sn = Navbar.new(@template, @params, options)
-      yield sn
-      @tabs << sn
+      add_item(Navbar, options, &block)
     end
 
     def render_navbar # :nodoc:
@@ -38,6 +32,15 @@ module Tabnav
         end
         contents
       end
+    end
+
+    private
+
+    def add_item(klass, options)
+      options[:tab_content_partial] = @tab_content_partial if @tab_content_partial
+      i = klass.new(@template, @params, options)
+      yield i
+      @tabs << i
     end
   end
 end
