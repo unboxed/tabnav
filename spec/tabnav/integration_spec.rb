@@ -194,4 +194,144 @@ describe Tabnav::Helper, :type => :helper do
           '<li>Custom markup for Froobles</li></ul>'
     end
   end
+
+  describe "nested navbars" do
+    it "should allow a nested navbar" do
+      helper.render_tabnav do |n|
+        n.add_tab do |t|
+          t.named "Home"
+          t.links_to '/'
+          t.highlights_on :controller => :home, :action => :index
+        end
+
+        n.add_sub_nav do |sn|
+          sn.named "Froobles"
+
+          sn.add_tab do |t|
+            t.named "All Froobles"
+            t.links_to '/froobles'
+            t.highlights_on :controller => :froobles, :action => :index
+          end
+
+          sn.add_tab do |t|
+            t.named "New Frooble"
+            t.links_to '/froobles/new'
+            t.highlights_on :controller => :froobles, :action => :new
+            t.highlights_on :controller => :froobles, :action => :create
+          end
+        end
+
+        n.add_tab do |t|
+          t.named "Something Else"
+          t.links_to "/somewhere"
+        end
+      end
+      helper.output_buffer.should == '<ul><li><a href="/">Home</a></li><li><span>Froobles</span>' +
+        '<ul><li><a href="/froobles">All Froobles</a></li><li><a href="/froobles/new">New Frooble</a></li></ul>' +
+        '</li><li><a href="/somewhere">Something Else</a></li></ul>'
+    end
+
+    it "highlighting logic should work on a subnavbar" do
+      controller.params[:controller] = :wibble
+      helper.render_tabnav do |n|
+        n.add_tab do |t|
+          t.named "Home"
+          t.links_to '/'
+          t.highlights_on :controller => :home, :action => :index
+        end
+
+        n.add_sub_nav do |sn|
+          sn.named "Froobles"
+          sn.highlights_on :controller => :wibble
+
+          sn.add_tab do |t|
+            t.named "All Froobles"
+            t.links_to '/froobles'
+            t.highlights_on :controller => :froobles, :action => :index
+          end
+
+          sn.add_tab do |t|
+            t.named "New Frooble"
+            t.links_to '/froobles/new'
+            t.highlights_on :controller => :froobles, :action => :new
+            t.highlights_on :controller => :froobles, :action => :create
+          end
+        end
+      end
+      helper.output_buffer.should == '<ul><li><a href="/">Home</a></li><li class="active"><span>Froobles</span>' +
+        '<ul><li><a href="/froobles">All Froobles</a></li><li><a href="/froobles/new">New Frooble</a></li></ul>' +
+        '</li></ul>'
+    end
+
+    it "highlighting logic should activate the subnavbar if any inner tabs are active" do
+      controller.params[:controller] = :froobles
+      controller.params[:action] = :new
+      helper.render_tabnav do |n|
+        n.add_tab do |t|
+          t.named "Home"
+          t.links_to '/'
+          t.highlights_on :controller => :home, :action => :index
+        end
+
+        n.add_sub_nav do |sn|
+          sn.named "Froobles"
+
+          sn.add_tab do |t|
+            t.named "All Froobles"
+            t.links_to '/froobles'
+            t.highlights_on :controller => :froobles, :action => :index
+          end
+
+          sn.add_tab do |t|
+            t.named "New Frooble"
+            t.links_to '/froobles/new'
+            t.highlights_on :controller => :froobles, :action => :new
+            t.highlights_on :controller => :froobles, :action => :create
+          end
+        end
+      end
+      helper.output_buffer.should == '<ul><li><a href="/">Home</a></li><li class="active"><span>Froobles</span>' +
+        '<ul><li><a href="/froobles">All Froobles</a></li><li class="active"><a href="/froobles/new">New Frooble</a></li></ul>' +
+        '</li></ul>'
+    end
+
+    it "should allow deep nesting of navbars" do
+      helper.render_tabnav do |n|
+        n.add_tab do |t|
+          t.named "Home"
+          t.links_to '/'
+        end
+
+        n.add_sub_nav do |sn|
+          sn.named "Foo"
+
+          sn.add_tab do |t|
+            t.named "All Foos"
+            t.links_to '/foos'
+          end
+
+          sn.add_sub_nav do |ssn|
+            ssn.named "Bars"
+            ssn.links_to '/foos/bars'
+
+            ssn.add_tab do |t|
+              t.named "New Bar"
+              t.links_to '/foos/bars/new'
+            end
+
+            ssn.add_tab do |t|
+              t.named "Wibble"
+              t.highlights_on Proc.new { true }
+            end
+          end
+        end
+      end
+      helper.output_buffer.should == '<ul><li><a href="/">Home</a></li><li class="active"><span>Foo</span>' +
+          '<ul><li><a href="/foos">All Foos</a></li><li class="active">' +
+            '<a href="/foos/bars">Bars</a>' + 
+            '<ul><li><a href="/foos/bars/new">New Bar</a></li><li class="active"><span>Wibble</span></li></ul>' + 
+          '</li></ul>' +
+        '</li></ul>'
+    end
+  end
 end
