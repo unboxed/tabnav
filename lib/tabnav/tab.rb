@@ -59,8 +59,9 @@ module Tabnav
     end
 
     def render # :nodoc:
-      @html_options[:class] = "#{@html_options[:class]} active".strip if self.active?
-      @template.content_tag(:li, @html_options) do
+      options = @html_options.dup
+      options[:class] = "#{options[:class]} active".strip if self.active?
+      @template.content_tag(:li, options) do
         render_tab
       end
     end

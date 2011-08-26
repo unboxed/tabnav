@@ -180,6 +180,15 @@ describe Tabnav::Tab do
         t.stub!(:active?).and_return(true)
         t.render.should == '<li class="my_class active"><span>A Tab</span></li>'
       end
+
+      it "should not modify the existing html_options on the tab" do
+        t = Tabnav::Tab.new(@template, {}, {:class => "my_class"})
+        t.named "A Tab"
+        t.stub!(:active?).and_return(true)
+        t.render
+        t.stub!(:active?).and_return(false)
+        t.render.should == '<li class="my_class"><span>A Tab</span></li>'
+      end
     end
   end
 end
