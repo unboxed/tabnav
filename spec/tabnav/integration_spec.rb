@@ -232,7 +232,7 @@ describe Tabnav::Helper, :type => :helper do
     end
 
     it "highlighting logic should work on a subnavbar" do
-      controller.params[:controller] = :wibble
+      controller.params['controller'] = 'wibble'
       helper.render_tabnav do |n|
         n.add_tab do |t|
           t.named "Home"
@@ -264,8 +264,8 @@ describe Tabnav::Helper, :type => :helper do
     end
 
     it "highlighting logic should activate the subnavbar if any inner tabs are active" do
-      controller.params[:controller] = :froobles
-      controller.params[:action] = :new
+      controller.params['controller'] = 'froobles'
+      controller.params['action'] = 'new'
       helper.render_tabnav do |n|
         n.add_tab do |t|
           t.named "Home"
