@@ -42,6 +42,53 @@ On any action in FrooblesController will output:
 
 See the highlights_on method of Tabnav::Tab for full details of the highlighting logic.
 
+=== Nested navbars
+
+In your view:
+
+  <%
+    render_tabnav do |n|
+      n.add_tab do |t|
+        t.named "Home"
+        t.links_to root_path
+        t.highlights_on :controller => :home, :action => :index
+      end
+      n.add_sub_nav do |sn|
+        sn.named "Froobles"
+        sn.links_to froobles_path
+        sn.highlights_on :controller => :froobles
+
+        sn.add_tab do |t|
+          t.named "New Frooble"
+          t.links_to new_frooble_path
+          t.highlights_on :controller => :froobles, :action => :new
+          t.highlights_on :controller => :froobles, :action => :create
+        end
+
+        sn.add_tab do |t|
+          t.named "Search Froobles"
+          t.links_to search_froobles_path
+          t.highlights_on :controler => :froobles, :action => :search
+        end
+      end
+    end
+  %>
+
+On FrooblesController#new will output:
+
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li class="active">
+      <a href="/froobles">Froobles</a>
+      <ul>
+        <li class="active"><a href="/froobles/new">New Frooble</a></li>
+        <li><a href="/froobles/search">Search Froobles</a></li>
+      </ul>
+    </li>
+  </ul>
+
+Navbars can be nested arbritarily deep.
+
 === Options for controlling markup
 
 View:
@@ -57,10 +104,14 @@ View:
         t.named "Froobles Heading"
         t.highlights_on :controller => :froobles
       end
-      n.add_tab do |t|
-        t.named "Froobles"
-        t.links_to froobles_path, :target => "_blank", :rel => "http://foo.bar/"
-        t.highlights_on :controller => :froobles, :action => :index
+      n.add_sub_nav :id => 'froobles' do |sn|
+        sn.named "Froobles"
+
+        sn.add_tab do |t|
+          t.named "All Froobles"
+          t.links_to froobles_path, :target => "_blank", :rel => "http://foo.bar/"
+          t.highlights_on :controller => :froobles, :action => :index
+        end
       end
     end
   %>
@@ -70,7 +121,12 @@ On froobles/index will output:
   <ul id="main_navigation" class="clearfix">
     <li class="home_tab"><a href="/">Home</a></li>
     <li class="heading active"><span>Froobles Heading</span></li>
-    <li class="active"><a href="/froobles" target="_blank" rel="http://foo.bar/">Froobles</a></li>
+    <li id="froobles">
+      <span>Froobles</span>
+      <ul>
+        <li class="active"><a href="/froobles" target="_blank" rel="http://foo.bar/">All Froobles</a></li>
+      </ul>
+    </li>
   </ul>
 
 === Custom tab partial
