@@ -36,14 +36,14 @@ describe Tabnav::Navbar do
     end
   end
 
-  describe "render" do
+  describe "render_navbar" do
     before :each do
       @template = ActionView::Base.new()
     end
 
     it "should output nothing if no tabs have been added" do
       n = Tabnav::Navbar.new(@template, {})
-      n.render.should == ''
+      n.render_navbar.should == ''
     end
 
     it "should output a ul containing the results of rendering each of it's tabs" do
@@ -57,7 +57,7 @@ describe Tabnav::Navbar do
       end
       t1.should_receive(:render).and_return("Tab 1 markup")
       t2.should_receive(:render).and_return("Tab 2 markup")
-      n.render.should == '<ul>Tab 1 markupTab 2 markup</ul>'
+      n.render_navbar.should == '<ul>Tab 1 markupTab 2 markup</ul>'
     end
 
     it "should pass the options given on creation to the ul" do
@@ -67,7 +67,7 @@ describe Tabnav::Navbar do
         t1 = t
       end
       @template.should_receive(:content_tag).with(:ul, {:id => "my_id", :class => "my_class"}).and_return(:some_markup)
-      n.render.should == :some_markup
+      n.render_navbar.should == :some_markup
     end
 
 #     it "should output a li containing a span with the name if no link given" do

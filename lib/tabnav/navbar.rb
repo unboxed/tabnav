@@ -22,7 +22,7 @@ module Tabnav
       @tabs << t
     end
 
-    def render # :nodoc:
+    def render_navbar # :nodoc:
       return '' if @tabs.empty?
       @template.content_tag :ul, @html_options do
         contents = ''.html_safe

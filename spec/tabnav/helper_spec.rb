@@ -26,7 +26,7 @@ describe Tabnav::Helper, :type => :helper do
     end
 
     it "should concat the results of calling render on the navbar" do
-      @navbar.should_receive(:render).and_return("Some Navbar Markup")
+      @navbar.should_receive(:render_navbar).and_return("Some Navbar Markup")
       helper.render_tabnav {|n| }
       helper.output_buffer.should == "Some Navbar Markup"
     end

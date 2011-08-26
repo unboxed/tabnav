@@ -11,7 +11,7 @@ module Tabnav
     def render_tabnav(options = {})
       n = Navbar.new(self, params, options)
       yield(n)
-      concat( n.render )
+      concat( n.render_navbar )
       nil
     end
   end
