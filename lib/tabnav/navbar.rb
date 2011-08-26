@@ -19,6 +19,11 @@ module Tabnav
       add_item(Tab, options, &block)
     end
 
+    # Creates a sub Navbar and adds it to the navbar.
+    #
+    # +options+ is an optional hash of options which will be used to create the +li+ containing the sub navbar.
+    #
+    # yields the created Navbar
     def add_sub_nav(options = {}, &block)
       add_item(Navbar, options, &block)
     end
