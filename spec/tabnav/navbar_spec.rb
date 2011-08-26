@@ -9,29 +9,29 @@ describe Tabnav::Navbar do
 
     it "should create a new tab with the passed template and params and yield it to the block" do
       n = Tabnav::Navbar.new(@template, {"foo" => "bar"})
-      t = Tabnav::Tab.new(@template, {})
-      Tabnav::Tab.should_receive(:new).with(@template, {"foo" => "bar"}, {}).and_return(t)
+      tab = Tabnav::Tab.new(@template, {})
+      Tabnav::Tab.should_receive(:new).with(@template, {"foo" => "bar"}, {}).and_return(tab)
       n.add_tab do |t|
-        t.should == t
+        t.should == tab
       end
     end
 
     it "should create the tab with any passed options" do
       n = Tabnav::Navbar.new(@template, {})
-      t = Tabnav::Tab.new(@template, {})
-      Tabnav::Tab.should_receive(:new).with(@template, {}, {:class => "my_class", :id => "my_id"}).and_return(t)
+      tab = Tabnav::Tab.new(@template, {})
+      Tabnav::Tab.should_receive(:new).with(@template, {}, {:class => "my_class", :id => "my_id"}).and_return(tab)
       n.add_tab :class => "my_class", :id => "my_id" do |t|
-        t.should == t
+        t.should == tab
       end
     end
 
     it "should add the custom partial to the options if set" do
       n = Tabnav::Navbar.new(@template, {})
       n.tab_content_partial = 'my_partial'
-      t = Tabnav::Tab.new(@template, {})
-      Tabnav::Tab.should_receive(:new).with(@template, {}, {:id => "my_id", :tab_content_partial => 'my_partial'}).and_return(t)
+      tab = Tabnav::Tab.new(@template, {})
+      Tabnav::Tab.should_receive(:new).with(@template, {}, {:id => "my_id", :tab_content_partial => 'my_partial'}).and_return(tab)
       n.add_tab :id => "my_id" do |t|
-        t.should == t
+        t.should == tab
       end
     end
   end
