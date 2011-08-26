@@ -47,5 +47,9 @@ module Tabnav
       yield i
       @tabs << i
     end
+
+    def render_tab
+      super + render_navbar
+    end
   end
 end

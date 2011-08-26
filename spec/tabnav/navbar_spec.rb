@@ -110,4 +110,18 @@ describe Tabnav::Navbar do
       n.render_navbar.should == :some_markup
     end
   end
+
+  describe "render" do
+    # This only covers the functionality specific to navbars, the rest is covered in tab_spec
+    before :each do
+      @template = ActionView::Base.new()
+    end
+    it "should insert the navbar inside the end of the li" do
+      n = Tabnav::Navbar.new(@template, {})
+      n.stub!(:render_navbar).and_return("The Navbar")
+      n.named "A Tab"
+      html = n.render
+      html.should == "<li><span>A Tab</span>The Navbar</li>"
+    end
+  end
 end
