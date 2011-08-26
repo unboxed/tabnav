@@ -22,6 +22,13 @@ module Tabnav
       @tabs << t
     end
 
+    def add_sub_nav(options = {}, &block)
+      options[:tab_content_partial] = @tab_content_partial if @tab_content_partial
+      sn = Navbar.new(@template, @params, options)
+      yield sn
+      @tabs << sn
+    end
+
     def render_navbar # :nodoc:
       return '' if @tabs.empty?
       @template.content_tag :ul, @html_options do

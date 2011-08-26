@@ -36,6 +36,40 @@ describe Tabnav::Navbar do
     end
   end
 
+  describe "add_sub_nav" do
+    before :each do
+      @template = ActionView::Base.new()
+    end
+
+    it "should create a new navbar with the passed template and params and yield it to the block" do
+      n = Tabnav::Navbar.new(@template, {"foo" => "bar"})
+      subnav = Tabnav::Navbar.new(@template, {})
+      Tabnav::Navbar.should_receive(:new).with(@template, {"foo" => "bar"}, {}).and_return(subnav)
+      n.add_sub_nav do |sn|
+        sn.should == subnav
+      end
+    end
+
+    it "should create the tab with any passed options" do
+      n = Tabnav::Navbar.new(@template, {})
+      subnav = Tabnav::Navbar.new(@template, {})
+      Tabnav::Navbar.should_receive(:new).with(@template, {}, {:class => "my_class", :id => "my_id"}).and_return(subnav)
+      n.add_sub_nav :class => "my_class", :id => "my_id" do |sn|
+        sn.should == subnav
+      end
+    end
+
+    it "should add the custom partial to the options if set" do
+      n = Tabnav::Navbar.new(@template, {})
+      n.tab_content_partial = 'my_partial'
+      subnav = Tabnav::Navbar.new(@template, {})
+      Tabnav::Navbar.should_receive(:new).with(@template, {}, {:id => "my_id", :tab_content_partial => 'my_partial'}).and_return(subnav)
+      n.add_sub_nav :id => "my_id" do |sn|
+        sn.should == subnav
+      end
+    end
+  end
+
   describe "render_navbar" do
     before :each do
       @template = ActionView::Base.new()
