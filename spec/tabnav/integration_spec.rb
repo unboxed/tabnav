@@ -298,39 +298,6 @@ describe Tabnav::Helper, :type => :helper do
         '</li></ul>'
     end
 
-    it "highlighting logic should activate the subnavbar if any inner tabs are active" do
-      pending "Is this actually the functionality we want?"
-      controller.params['controller'] = 'froobles'
-      controller.params['action'] = 'new'
-      helper.render_tabnav do |n|
-        n.add_tab do |t|
-          t.named "Home"
-          t.links_to '/'
-          t.highlights_on :controller => :home, :action => :index
-        end
-
-        n.add_sub_nav do |sn|
-          sn.named "Froobles"
-
-          sn.add_tab do |t|
-            t.named "All Froobles"
-            t.links_to '/froobles'
-            t.highlights_on :controller => :froobles, :action => :index
-          end
-
-          sn.add_tab do |t|
-            t.named "New Frooble"
-            t.links_to '/froobles/new'
-            t.highlights_on :controller => :froobles, :action => :new
-            t.highlights_on :controller => :froobles, :action => :create
-          end
-        end
-      end
-      helper.output_buffer.should == '<ul><li><a href="/">Home</a></li><li class="active"><span>Froobles</span>' +
-        '<ul><li><a href="/froobles">All Froobles</a></li><li class="active"><a href="/froobles/new">New Frooble</a></li></ul>' +
-        '</li></ul>'
-    end
-
     it "should allow deep nesting of navbars" do
       helper.render_tabnav do |n|
         n.add_tab do |t|
