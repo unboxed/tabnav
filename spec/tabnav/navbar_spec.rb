@@ -121,7 +121,9 @@ describe Tabnav::Navbar do
 
     it "should output nothing if no tabs have been added" do
       n = Tabnav::Navbar.new(@template, {})
-      n.render_navbar.should == ''
+      html = n.render_navbar
+      html.should == ''
+      html.should be_html_safe
     end
 
     it "should output a ul containing the results of rendering each of it's tabs" do
@@ -170,6 +172,7 @@ describe Tabnav::Navbar do
       n.named "A Tab"
       html = n.render
       html.should == "<li><span>A Tab</span>The Navbar</li>"
+      html.should be_html_safe
     end
   end
 end

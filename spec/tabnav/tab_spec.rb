@@ -43,6 +43,7 @@ describe Tabnav::Tab do
       t.named "A Tab"
       html = t.render
       html.should == "<li><span>A Tab</span></li>"
+      html.should be_html_safe
     end
 
     it "should output a li containing a link with the name" do
@@ -51,6 +52,7 @@ describe Tabnav::Tab do
       t.links_to "/wibble"
       html = t.render
       html.should == "<li><a href=\"/wibble\">A Tab</a></li>"
+      html.should be_html_safe
     end
 
     context "with no name given" do
@@ -58,6 +60,7 @@ describe Tabnav::Tab do
         t = Tabnav::Tab.new(@template, {})
         html = t.render
         html.should == "<li><span></span></li>"
+        html.should be_html_safe
       end
       
       it "should output an empty link" do
@@ -65,6 +68,7 @@ describe Tabnav::Tab do
         t.links_to "/wibble"
         html = t.render
         html.should == "<li><a href=\"/wibble\"></a></li>"
+        html.should be_html_safe
       end
     end
 
@@ -82,6 +86,7 @@ describe Tabnav::Tab do
       t.links_to "/wibble", :class => "link_class", :target => "_blank"
       html = t.render
       html.should == "<li>A Link</li>"
+      html.should be_html_safe
     end
 
     context "with a custom partial" do
