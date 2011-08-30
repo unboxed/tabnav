@@ -176,7 +176,7 @@ describe Tabnav::Helper, :type => :helper do
       helper.should_receive(:render).twice do |args|
         args[:partial].should == '/tab_content'
         args[:locals][:tab].should be_a(Tabnav::Tab)
-        "Custom markup for #{args[:locals][:tab].name}"
+        "Custom markup for #{args[:locals][:tab].name}".html_safe
       end
       helper.render_tabnav do |n|
         n.tab_content_partial = '/tab_content'
@@ -192,6 +192,63 @@ describe Tabnav::Helper, :type => :helper do
       helper.output_buffer.should ==
           '<ul><li>Custom markup for Home</li>' +
           '<li>Custom markup for Froobles</li></ul>'
+    end
+
+    it "should carry custom partials into subnavbars" do
+      helper.should_receive(:render).exactly(3).times do |args|
+        args[:locals][:tab].should be_a(Tabnav::Tab)
+        "#{args[:partial]} markup for #{args[:locals][:tab].name}".html_safe
+      end
+      helper.render_tabnav do |n|
+        n.tab_content_partial = '/tab_content'
+        n.add_tab do |t|
+          t.named "Home"
+          t.links_to "/"
+        end
+        n.add_sub_nav do |sn|
+          sn.named "Froobles"
+          sn.links_to "/froobles"
+
+          sn.add_tab do |t|
+            t.named "New"
+            t.links_to "/froobles/new"
+          end
+        end
+      end
+      helper.output_buffer.should ==
+          '<ul><li>/tab_content markup for Home</li>' +
+          '<li>/tab_content markup for Froobles' +
+          '<ul><li>/tab_content markup for New</li></ul>' +
+          '</li></ul>'
+    end
+
+    it "should allow overriding custom partials in subnavbars" do
+      helper.should_receive(:render).exactly(3).times do |args|
+        args[:locals][:tab].should be_a(Tabnav::Tab)
+        "#{args[:partial]} markup for #{args[:locals][:tab].name}".html_safe
+      end
+      helper.render_tabnav do |n|
+        n.tab_content_partial = '/tab_content'
+        n.add_tab do |t|
+          t.named "Home"
+          t.links_to "/"
+        end
+        n.add_sub_nav do |sn|
+          sn.named "Froobles"
+          sn.links_to "/froobles"
+          sn.tab_content_partial = '/sub_tab_content'
+
+          sn.add_tab do |t|
+            t.named "New"
+            t.links_to "/froobles/new"
+          end
+        end
+      end
+      helper.output_buffer.should ==
+          '<ul><li>/tab_content markup for Home</li>' +
+          '<li>/tab_content markup for Froobles' +
+          '<ul><li>/sub_tab_content markup for New</li></ul>' +
+          '</li></ul>'
     end
   end
 

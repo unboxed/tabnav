@@ -34,6 +34,25 @@ describe Tabnav::Navbar do
         t.should == tab
       end
     end
+
+    it "should add the tabnav's partial to the options if one was set" do
+      n = Tabnav::Navbar.new(@template, {}, :tab_content_partial => 'my_partial')
+      tab = Tabnav::Tab.new(@template, {})
+      Tabnav::Tab.should_receive(:new).with(@template, {}, {:id => "my_id", :tab_content_partial => 'my_partial'}).and_return(tab)
+      n.add_tab :id => "my_id" do |t|
+        t.should == tab
+      end
+    end
+
+    it "should use the custom partial in preference to the navbars partial" do
+      n = Tabnav::Navbar.new(@template, {}, :tab_content_partial => 'my_other_partial')
+      n.tab_content_partial = 'my_partial'
+      tab = Tabnav::Tab.new(@template, {})
+      Tabnav::Tab.should_receive(:new).with(@template, {}, {:id => "my_id", :tab_content_partial => 'my_partial'}).and_return(tab)
+      n.add_tab :id => "my_id" do |t|
+        t.should == tab
+      end
+    end
   end
 
   describe "add_sub_nav" do
@@ -61,6 +80,25 @@ describe Tabnav::Navbar do
 
     it "should add the custom partial to the options if set" do
       n = Tabnav::Navbar.new(@template, {})
+      n.tab_content_partial = 'my_partial'
+      subnav = Tabnav::Navbar.new(@template, {})
+      Tabnav::Navbar.should_receive(:new).with(@template, {}, {:id => "my_id", :tab_content_partial => 'my_partial'}).and_return(subnav)
+      n.add_sub_nav :id => "my_id" do |sn|
+        sn.should == subnav
+      end
+    end
+
+    it "should add the tabnav's partial to the options if one was set" do
+      n = Tabnav::Navbar.new(@template, {}, :tab_content_partial => 'my_partial')
+      subnav = Tabnav::Navbar.new(@template, {})
+      Tabnav::Navbar.should_receive(:new).with(@template, {}, {:id => "my_id", :tab_content_partial => 'my_partial'}).and_return(subnav)
+      n.add_sub_nav :id => "my_id" do |sn|
+        sn.should == subnav
+      end
+    end
+
+    it "should use the custom partial in preference to the navbars partial" do
+      n = Tabnav::Navbar.new(@template, {}, :tab_content_partial => 'my_other_partial')
       n.tab_content_partial = 'my_partial'
       subnav = Tabnav::Navbar.new(@template, {})
       Tabnav::Navbar.should_receive(:new).with(@template, {}, {:id => "my_id", :tab_content_partial => 'my_partial'}).and_return(subnav)

@@ -1,11 +1,10 @@
 module Tabnav
   class Navbar < Tab
-    def initialize(template, params, options = {}) # :nodoc:
-      @template = template
-      @params = params
-      @top_level = options.delete(:top_level)
-      @html_options = options
+    def initialize(template, params, html_options = {}) # :nodoc:
+      @top_level = html_options.delete(:top_level)
+      super
       @tabs = []
+      @tab_content_partial = @partial
     end
 
     # Optionally specifies a partial to be used to render the tab content.
