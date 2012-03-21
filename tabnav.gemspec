@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency(%q<actionpack>, [">= 2.3.8"])
-  s.add_development_dependency(%q<rspec>, ["~> 2.6.0"])
-  s.add_development_dependency(%q<rspec-rails>, ["~> 2.6.1"])
+  s.add_development_dependency(%q<rspec>, ["~> 2.9.0"])
+  s.add_development_dependency(%q<rspec-rails>, ["~> 2.9.0"])
 end
