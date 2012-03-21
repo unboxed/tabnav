@@ -1,3 +1,4 @@
+require 'tabnav/version'
 
 module Tabnav
 end
