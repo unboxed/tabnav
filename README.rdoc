@@ -137,7 +137,7 @@ View:
 
   <%
     render_tabnav :html => {:id => "main_navigation", :class => "clearfix"} do |n|
-      n.tab_partial "/shared/my_custom_tab"
+      n.tab_content_partial = "/shared/my_custom_tab"
       n.add_tab :html => {:class => "home_tab"} do |t|
         t.named "Home"
         t.links_to root_path
@@ -182,7 +182,7 @@ On froobles/index the output will be:
 The concept for this is based on the tabnav component from rails_widgets: http://github.com/paolodona/rails-widgets
 
 == Note on Patches/Pull Requests
- 
+
 * Fork the project.
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a
