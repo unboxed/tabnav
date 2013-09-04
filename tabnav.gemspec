@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency(%q<actionpack>, [">= 3.0.0"])
+  s.add_development_dependency(%q<rails>, ["= 4.0.0"])
   s.add_development_dependency(%q<rspec>, ["~> 2.9.0"])
   s.add_development_dependency(%q<rspec-rails>, ["~> 2.9.0"])
 end
