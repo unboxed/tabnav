@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- spec/*`.split("\n")
-  s.extra_rdoc_files = %w(LICENSE README.rdoc)
+  s.extra_rdoc_files = %w(LICENSE README.md)
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency(%q<actionpack>, [">= 2.3.8"])
