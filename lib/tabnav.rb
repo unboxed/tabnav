@@ -1,5 +1,3 @@
-module Tabnav
-end
 
 require 'tabnav/version'
 require 'tabnav/tab'
