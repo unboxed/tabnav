@@ -1,3 +1,4 @@
+require 'action_controller' unless defined?(ActionController)
 
 require 'tabnav/version'
 require 'tabnav/tab'
