@@ -159,6 +159,26 @@ describe Tabnav::Navbar do
       @template.should_receive(:content_tag).with(:ul, nil).and_return(:some_markup)
       n.render_navbar.should == :some_markup
     end
+
+    it "should pass the ul_class option to the ul if it's not the top-level navbar" do
+      n = Tabnav::Navbar.new(@template, {}, :id => "my_id", :class => "my_class", :ul_class => "ul_class")
+      t1 = nil
+      n.add_tab do |t|
+        t1 = t
+      end
+      @template.should_receive(:content_tag).with(:ul, {:class => "ul_class"}).and_return(:some_markup)
+      n.render_navbar.should == :some_markup
+    end
+
+    it "should not pass the ul_class option to the ul if it's the top-level navbar" do
+      n = Tabnav::Navbar.new(@template, {}, :id => "my_id", :class => "my_class", :ul_class => "ul_class", :top_level => true)
+      t1 = nil
+      n.add_tab do |t|
+        t1 = t
+      end
+      @template.should_receive(:content_tag).with(:ul, {:id => "my_id", :class => "my_class"}).and_return(:some_markup)
+      n.render_navbar.should == :some_markup
+    end
   end
 
   describe "render" do
