@@ -2,6 +2,7 @@ module Tabnav
   class Navbar < Tab
     def initialize(template, params, html_options = {}) # :nodoc:
       @top_level = html_options.delete(:top_level)
+      @container_options = html_options.delete(:container_html)
       super
       @tabs = []
       @tab_content_partial = @partial
@@ -30,7 +31,8 @@ module Tabnav
 
     def render_navbar # :nodoc:
       return ''.html_safe if @tabs.empty?
-      @template.content_tag :ul, @top_level ? @html_options : nil do
+      options = @top_level ? @html_options : @container_options
+      @template.content_tag :ul, options do
         contents = ''.html_safe
         @tabs.each do |tab|
           contents << tab.render
